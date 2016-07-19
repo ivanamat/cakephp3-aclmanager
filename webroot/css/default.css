@@ -1,0 +1,21 @@
+/**
+ * CSS 3
+ *
+ * @category CakePHP3
+ * @package  AclManager\Controller
+ * @author   Ivan Amat <dev@ivanamat.es>
+ * @license  MIT http://opensource.org/licenses/MIT
+ * @link     https://github.com/ivanamat/CakePHP3-AclManager
+ */
+
+.subtitle {
+    font-size: 24px;
+}
+
+.select-perm * {
+    display: inline-block;
+}
+
+.select-perm select {
+    width: calc(100% - 38px);
+}
