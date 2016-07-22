@@ -74,7 +74,7 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
                         <th>
                             <?php
                             if (($model == 'Roles' OR $model == 'Users') && $this->request->session()->read('Auth.User.role_id') == 1) {
-                                $gData = $this->Acl->getName('Groups', $aro['group_id']);
+                                $gData = $this->AclManager->getName('Groups', $aro['group_id']);
                                 echo h($aro[$aroDisplayField]) . ' ( ' . $gData['name'] . ' )';
                             } else {
                                 echo h($aro[$aroDisplayField]);
@@ -103,18 +103,18 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
                         echo "<tr class='aclmanager-ident-" . $ident . "'>";
                     }
 
-                    if ($this->Acl->check(['Users' => ['id' => $this->request->session()->read('Auth.User.id')]], $action) ||
+                    if ($this->AclManager->Acl->check(['Users' => ['id' => $this->request->session()->read('Auth.User.id')]], $action) ||
                             $this->request->session()->read('Auth.User.Role.id') == 1) {
                         echo "<td>";
                         echo Inflector::humanize(($ident == 1 ? "<strong>" : "" ) . ($uglyIdent ? str_repeat("&nbsp;&nbsp;", $ident) : "") . h($alias) . ($ident == 1 ? "</strong>" : "" ));
                         echo "</td>";
 
                         foreach ($aros as $aro):
-                            $inherit = $this->Acl->value("Perms." . str_replace("/", ":", $action) . ".{$aroAlias}:{$aro[$aroAlias]['id']}-inherit");
-                            $allowed = $this->Acl->value("Perms." . str_replace("/", ":", $action) . ".{$aroAlias}:{$aro[$aroAlias]['id']}");
+                            $inherit = $this->AclManager->value("Perms." . str_replace("/", ":", $action) . ".{$aroAlias}:{$aro[$aroAlias]['id']}-inherit");
+                            $allowed = $this->AclManager->value("Perms." . str_replace("/", ":", $action) . ".{$aroAlias}:{$aro[$aroAlias]['id']}");
 
                             $mAro = $model;
-                            $mAllowed = $this->Acl->check($aro, $action);
+                            $mAllowed = $this->AclManager->Acl->check($aro, $action);
                             $mAllowedText = ($mAllowed) ? 'Allow' : 'Deny';
 
                             // Originally based on 'allowed' above 'mAllowed'

@@ -31,17 +31,6 @@ use Cake\Datasource\ConnectionManager;
 class AclController extends AppController {
 
     /**
-     * Helpers
-     *
-     * @var array
-     */
-    public $helpers = [
-        'Acl' => [
-            'className' => 'AclManager.Acl'
-        ]
-    ];
-    
-    /**
      * Components
      *
      * @var array

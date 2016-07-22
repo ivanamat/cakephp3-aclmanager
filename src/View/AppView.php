@@ -43,7 +43,7 @@ class AppView extends View {
      * @return void
      */
     public function initialize() {
-        $this->loadHelper('AclManager.Acl');
+        $this->loadHelper('AclManager.AclManager');
         $this->loadHelper('Html');
     }
 

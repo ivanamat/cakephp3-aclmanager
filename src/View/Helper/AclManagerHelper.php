@@ -29,7 +29,7 @@ use Cake\ORM\TableRegistry;
 use Cake\View\Helper;
 use Cake\View\View;
 
-class AclHelper extends Helper {
+class AclManagerHelper extends Helper {
     
     /**
      * Helpers used.
