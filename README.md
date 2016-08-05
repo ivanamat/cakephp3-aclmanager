@@ -55,7 +55,7 @@ An example schema:
         `created` datetime DEFAULT NULL,
         `modified` datetime DEFAULT NULL,
         PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
     CREATE TABLE `roles` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -64,7 +64,7 @@ An example schema:
         `created` datetime DEFAULT NULL,
         `modified` datetime DEFAULT NULL,
         PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
     CREATE TABLE `users` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -78,7 +78,7 @@ An example schema:
         PRIMARY KEY (`id`),
         UNIQUE KEY `username` (`username`),
         UNIQUE KEY `email` (`email`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ```
 
 
