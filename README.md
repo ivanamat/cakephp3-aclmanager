@@ -1,4 +1,4 @@
-# CakePHP 3.x AclManager
+# CakePHP 3.x Acl Manager
 
 ## Installation
 
