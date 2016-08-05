@@ -37,7 +37,7 @@ Download the .zip or .tar.gz file, unzip and rename the plugin folder "cakephp3-
     Plugin::load('AclManager', ['bootstrap' => true, 'routes' => true]);
 ```
 
-**Warning:** It is not recommended to use Plugin::loadAll();. if you use Plugin::loadAll(); make sure it will not load any plugin several times.
+**Warning:** It is not recommended to use Plugin::loadAll();. if you use Plugin::loadAll(); make sure it will not load any plugin several times with Plugin::load('PluginName').
 
 
 ## Creating ACL tables
