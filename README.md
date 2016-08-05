@@ -123,6 +123,7 @@ Include and configure the *AuthComponent* and the *AclComponent* in the *AppCont
             'action' => 'login'
         ],
         'unauthorizedRedirect' => [
+            'plugin' => false,
             'controller' => 'Users',
             'action' => 'login',
             'prefix' => false
