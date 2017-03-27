@@ -71,22 +71,6 @@ class AclManagerComponent extends Component {
     }
 
     /**
-     * Acos Builder, find all public actions from controllers and stored them
-     * with Acl tree behavior to the acos table.
-     * Alias first letter of Controller will
-     * be capitalized and actions will be lowercase
-     *
-     * @return bool return true if acos saved
-     */
-    public function acosBuilder() {
-        $srcControllers = $this->__getResources();
-        $pluginsControllers = $this->__getPluginsResources();
-        //$this->checkNodeOrSave("", "", null);
-        $this->__setAcos($srcControllers);
-        $this->__setPluginsAcos($pluginsControllers);
-    }
-    
-    /**
      * TODO: Select Aros from Configure::read('AclManager.aros'); 
      * @author Ivan Amat <dev@ivanamat.es>
      * @copyright Copyright 2016, Iván Amat

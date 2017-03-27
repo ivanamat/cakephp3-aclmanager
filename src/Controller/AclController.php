@@ -27,9 +27,12 @@ use AclManager\Controller\AppController;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
+use AclManager\AclExtras;
 
 class AclController extends AppController {
 
+    protected $AclExtras;
+    
     /**
      * Components
      *
@@ -43,7 +46,7 @@ class AclController extends AppController {
             'className' => 'AclManager.AclManager'
         ]
     ];
-    
+
     /**
      * Model
      *
@@ -63,6 +66,8 @@ class AclController extends AppController {
          */
         $registry = new ComponentRegistry();
         $this->Acl = new AclComponent($registry, Configure::read('Acl'));
+        $this->AclExtras = new AclExtras();
+        $this->AclExtras->startup($this);
         
         /**
          * Loading required Model
@@ -180,19 +185,9 @@ class AclController extends AppController {
      * Sets the missing actions in the database
      */
     public function updateAcos() {
-        $resources = $this->_getAcos();
-        $countActual = count($resources);
+        
+        $this->AclExtras->acoUpdate();
 
-        $ab = $this->AclManager->acosBuilder();
-
-        $newResources = $this->_getAcos();
-        $countAcosBuilder = count($newResources);
-        
-        $count = (($countAcosBuilder + $countActual) ==  $countActual) ? 0 : ($countAcosBuilder - $countActual);
-        
-        $string = sprintf(__("%d ACOs have been created/updated"), $count);
-        
-        $this->Flash->success($string);
         $url = ($this->request->referer() == '/') ? ['plugin' => 'AclManager','controller' => 'Acl','action' => 'permissions'] : $this->request->referer();
         $this->redirect($url);
     }
@@ -204,7 +199,8 @@ class AclController extends AppController {
     public function updateAros() {
 	$arosCounter = $this->AclManager->arosBuilder();
         
-        $this->Flash->success(sprintf(__("%d AROs have been created/updated"), $arosCounter));
+        $this->Flash->success(sprintf(__("%d AROs have been added"), $arosCounter));
+        $this->Flash->success("AROs update complete");
         $url = ($this->request->referer() == '/') ? ['plugin' => 'AclManager','controller' => 'Acl','action' => 'permissions'] : $this->request->referer();
         $this->redirect($url);
     }
@@ -225,8 +221,8 @@ class AclController extends AppController {
         
         // $this->Acl->allow(['Groups' => ['id' => 1]], 'controllers');
         // $this->Flash->success(__("Granted permissions to group with id 1"));
-        $this->Acl->allow(['Roles' => ['id' => 1]], 'controllers');
-        $this->Flash->success(__("Granted permissions to role with id 1"));
+        // $this->Acl->allow(['Roles' => ['id' => 1]], 'controllers');
+        // $this->Flash->success(__("Granted permissions to role with id 1"));
         
         $this->redirect(array("action" => "permissions"));
     }
@@ -237,29 +233,26 @@ class AclController extends AppController {
     public function drop() {
         $conn = ConnectionManager::get('default');
         $stmt1 = $conn->execute('TRUNCATE TABLE aros_acos');
-        /*
         $info1 = $stmt1->errorInfo();
         if ($info1 != null && !empty($info1)) {
             $this->log($info1, LOG_ERR);
             $this->Flash->error($info1);
         }
-        */
+        
         $stmt2 = $conn->execute('TRUNCATE TABLE acos');
-        /*
         $info2 = $stmt2->errorInfo();
         if ($info2 != null && !empty($info2)) {
             $this->log($info2, LOG_ERR);
             $this->Flash->error($info2);
         }
-        */
+        
         $stmt3 = $conn->execute('TRUNCATE TABLE aros');
-        /*
         $info3 = $stmt3->errorInfo();
         if ($info3 != null && !empty($info3)) {
             $this->log($info3, LOG_ERR);
             $this->Flash->error($info3);
         }
-        */
+        
         if($this->AclManager->checkNodeOrSave('controllers', 'controllers', null)) {
             $string = __("The root node 'controllers' has been created");
             $this->log($string, LOG_INFO);
@@ -278,51 +271,55 @@ class AclController extends AppController {
     public function defaults() {
         $conn = ConnectionManager::get('default');
         $stmt1 = $conn->execute('TRUNCATE TABLE aros_acos');
-        /*
         $info1 = $stmt1->errorInfo();
         if ($info1 != null && !empty($info1)) {
             $this->log($info1, LOG_ERR);
             $this->Flash->error($info1);
         }
-        */
+
         $stmt2 = $conn->execute('TRUNCATE TABLE acos');
-        /*
         $info2 = $stmt2->errorInfo();
         if ($info2 != null && !empty($info2)) {
             $this->log($info2, LOG_ERR);
             $this->Flash->error($info2);
         }
-        */
+
         $stmt3 = $conn->execute('TRUNCATE TABLE aros');
-        /*
         $info3 = $stmt3->errorInfo();
         if ($info3 != null && !empty($info3)) {
             $this->log($info3, LOG_ERR);
             $this->Flash->error($info3);
         }
-        */
+
         $this->Flash->success(__("Permissions ACOs and AROs have been dropped"));
 
-        /**
-         * Build and count acos
-         */
-        $this->AclManager->acosBuilder();
-        $acos = $this->_getAcos();
-        $this->Flash->success(sprintf(__("%d ACOs have been created"), count($acos)));
         
         /**
-         * Build and count aros
+         * ARO Sync
          */
         $aros = $this->AclManager->arosBuilder();
-        $this->Flash->success(sprintf(__("%d AROs have been created"), $aros));
+        $this->Flash->success(sprintf(__("%d AROs have been added"), $aros));
+        $this->Flash->success(__("AROs update complete"));
+
+        /**
+         * ACO Sync
+         */
+        $this->AclExtras->acoUpdate();
         
-        $this->Acl->allow(['Groups' => ['id' => 1]], 'controllers');
-        $this->Flash->success(__("Granted permissions to group with id 1"));
-        $this->Acl->allow(['Roles' => ['id' => 1]], 'controllers');
-        $this->Flash->success(__("Granted permissions to role with id 1"));
+        /**
+         * Loading required Model
+         */
+        $models = Configure::read('AclManager.aros');
+        foreach ($models as $model) {
+            $f = $this->{$model}->find('all')->first();
+            $this->log("FIRST!", LOG_DEBUG);
+            $this->log($f, LOG_DEBUG);
+            
+            $this->Acl->allow([$model => ['id' => $f->id]], 'controllers');
+            $this->Flash->success(__("Granted permissions to {0} with id {1}", $model, (int)$f->id));
+        }
         
         $this->Flash->success(__("Congratulations! Everything has been restored by default!"));
-        
         $this->redirect(["action" => "permissions"]);
     }
 
@@ -435,6 +432,7 @@ class AclController extends AppController {
     /**
      * Returns all the ACOs including their path
      */
+    
     protected function _getAcos() {
         $acos = $this->Acl->Aco->find('all', array('order' => 'Acos.lft ASC', 'recursive' => -1))->toArray();
         $parents = array();

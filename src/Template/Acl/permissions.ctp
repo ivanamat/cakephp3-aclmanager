@@ -106,7 +106,7 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
                     if ($this->AclManager->Acl->check(['Users' => ['id' => $this->request->session()->read('Auth.User.id')]], $action) ||
                             $this->request->session()->read('Auth.User.Role.id') == 1) {
                         echo "<td>";
-                        echo Inflector::humanize(($ident == 1 ? "<strong>" : "" ) . ($uglyIdent ? str_repeat("&nbsp;&nbsp;", $ident) : "") . h($alias) . ($ident == 1 ? "</strong>" : "" ));
+                        echo Inflector::humanize(($ident == 1 ? "<strong>" : "" ) . ($uglyIdent ? str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $ident) : "") . h($alias) . ($ident == 1 ? "</strong>" : "" ));
                         echo "</td>";
 
                         foreach ($aros as $aro):
