@@ -36,11 +36,9 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
     <div class="columns large-4">
         <h3><?php echo __('Manage'); ?></h3>
         <ul class="options">
-            <?php if($this->request->session()->check('Auth.User.role_id') && $this->request->session()->read('Auth.User.role_id') == 1) { ?>
-                <li><?php echo $this->Html->link(__('Manage groups'), ['controller' => 'Acl', 'action' => 'Permissions', 'Groups']); ?></li>
-            <?php } ?>
-            <li><?php echo $this->Html->link(__('Manage roles'), ['controller' => 'Acl', 'action' => 'Permissions', 'Roles']); ?></li>
-            <li><?php echo $this->Html->link(__('Manage users'), ['controller' => 'Acl', 'action' => 'Permissions', 'Users']); ?></li>
+            <?php foreach ($manage as $k => $item): ?>
+            <li><?php echo $this->Html->link(__('Manage {0}', strtolower($item)), ['controller' => 'Acl', 'action' => 'Permissions', $item]); ?></li>
+            <?php endforeach; ?>
         </ul>
     </div>
     <?php if($this->request->session()->check('Auth.User.role_id') && $this->request->session()->read('Auth.User.role_id') == 1) { ?>

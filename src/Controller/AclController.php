@@ -174,6 +174,7 @@ class AclController extends AppController {
 
         $this->request->data = array('Perms' => $perms);
         $this->set('model', $model);
+        $this->set('manage', Configure::read('AclManager.aros'));
         $this->set('aroAlias', $Aro->alias());
         $this->set('aroDisplayField', $Aro->displayField());
         $this->set(compact('acos', 'aros'));
