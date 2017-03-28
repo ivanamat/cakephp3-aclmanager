@@ -220,10 +220,20 @@ class AclController extends AppController {
             $this->Flash->error(__("Error while trying to drop permissions"));
         }
         
-        // $this->Acl->allow(['Groups' => ['id' => 1]], 'controllers');
-        // $this->Flash->success(__("Granted permissions to group with id 1"));
-        // $this->Acl->allow(['Roles' => ['id' => 1]], 'controllers');
-        // $this->Flash->success(__("Granted permissions to role with id 1"));
+        /**
+         * Get  Model
+         */
+        $models = Configure::read('AclManager.aros');
+        foreach ($models as $model) {
+            $f = $this->{$model}->find('all',
+                ['order' => [$model.'.id' => 'ASC']
+            ])->first();
+            
+            $this->log($f, LOG_DEBUG);
+            
+            $this->Acl->allow([$model => ['id' => $f->id]], 'controllers');
+            $this->Flash->success(__("Granted permissions to {0} with id {1}", $model, (int)$f->id));
+        }
         
         $this->redirect(array("action" => "permissions"));
     }
@@ -308,11 +318,13 @@ class AclController extends AppController {
         $this->AclExtras->acoUpdate();
         
         /**
-         * Loading required Model
+         * Get  Model
          */
         $models = Configure::read('AclManager.aros');
         foreach ($models as $model) {
-            $f = $this->{$model}->find('all')->first();
+            $f = $this->{$model}->find('all',
+                ['order' => [$model.'.id' => 'ASC']
+            ])->first();
             $this->log("FIRST!", LOG_DEBUG);
             $this->log($f, LOG_DEBUG);
             

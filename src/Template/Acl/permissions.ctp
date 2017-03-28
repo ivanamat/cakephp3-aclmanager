@@ -41,12 +41,11 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
             <?php endforeach; ?>
         </ul>
     </div>
-    <?php if($this->request->session()->check('Auth.User.role_id') && $this->request->session()->read('Auth.User.role_id') == 1) { ?>
     <div class="columns large-4">
         <h3><?php echo __('Update'); ?></h3>
         <ul class="options">
-            <li><?php echo $this->Html->link(__('Update ACOs'), ['controller' => 'Acl', 'action' => 'UpdateAcos']); ?></li>
             <li><?php echo $this->Html->link(__('Update AROs'), ['controller' => 'Acl', 'action' => 'UpdateAros']); ?></li>
+            <li><?php echo $this->Html->link(__('Update ACOs'), ['controller' => 'Acl', 'action' => 'UpdateAcos']); ?></li>
         </ul>
     </div>
     <div class="columns large-4">
@@ -57,7 +56,6 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
             <li><?php echo $this->Html->link(__('Restore to default'), ['controller' => 'Acl', 'action' => 'defaults'], ['confirm' => __('Do you want restore all permissions? This will override all above assigned permissions. Only root users can access after reset to defaults.')]); ?></li>
         </ul>
     </div>
-    <?php } ?>
 </div>
 
 <div class="row panel">
