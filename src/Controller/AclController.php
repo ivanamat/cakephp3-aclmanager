@@ -199,7 +199,6 @@ class AclController extends AppController {
      */
     public function updateAros() {
 	$arosCounter = $this->AclManager->arosBuilder();
-        
         $this->Flash->success(sprintf(__("%d AROs have been added"), $arosCounter));
         $this->Flash->success("AROs update complete");
         $url = ($this->request->referer() == '/') ? ['plugin' => 'AclManager','controller' => 'Acl','action' => 'permissions'] : $this->request->referer();

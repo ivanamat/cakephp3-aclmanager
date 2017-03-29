@@ -37,6 +37,7 @@ use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use ReflectionClass;
 use ReflectionMethod;
+use Cake\Utility\Inflector;
 
 class AclManagerComponent extends Component {
 
@@ -62,6 +63,7 @@ class AclManagerComponent extends Component {
      * @return null
      */
     public function initialize(array $config) {
+        $this->controller = $this->_registry->getController();
         $registry = new ComponentRegistry();
         $this->Acl = new AclComponent($registry, Configure::read('Acl'));
         $this->Aco = $this->Acl->Aco;
@@ -77,12 +79,52 @@ class AclManagerComponent extends Component {
      * @return bool return true if all aros saved
      */
     public function arosBuilder() {
+        
+        $newAros = array();
+        $counter = 0;        
+        $parent = null;
+        
+        $models = Configure::read('AclManager.aros');
+        foreach ($models as $model) {
+            $this->{$model} = TableRegistry::get($model);
+
+            // Build the roles.
+            $items = $this->{$model}->find('all');
+            foreach($items as $item) {
+                $arrayItem = $item->toArray();
+                $alias = null;
+                if(isset($arrayItem["name"])) {
+                    $alias = $arrayItem["name"];
+                }
+                
+                if(isset($arrayItem["username"])) {
+                    $alias = $arrayItem["username"];
+                }
+                
+                $aro = new Aro([
+                    'alias'=>$alias,
+                    'foreign_key' => $item->id,
+                    'model'=>$this->{$model}->alias(),
+                    'parent_id' => (isset($parent->id)) ? $parent->id : null
+                ]);
+
+                if($this->__findAro($aro) == 0 && $this->Acl->Aro->save($aro)) {  
+                    if($counter < (count($models)-1)) {
+                        $parent = $this->Aro->find('all',
+                            ['conditions' => [
+                                'model' => $model,
+                                'foreign_key' => $arrayItem["id"]
+                            ]])->first();
+                    }
+                    $counter++;
+                }
+            }
+        }
+        
+        /*
         $this->Groups = TableRegistry::get('Groups');
         $this->Roles = TableRegistry::get('Roles');
         $this->Users = TableRegistry::get('Users');
-        
-        $newAros = array();
-        $counter = 0;
         
         // Build the groups.
 	$groups = $this->Groups->find('all')->toArray();
@@ -136,6 +178,7 @@ class AclManagerComponent extends Component {
                 $counter++;
             }
 	}
+        */
 
         return $counter;
     }
@@ -468,17 +511,18 @@ class AclManagerComponent extends Component {
      * Find Aro in database
      **/
     private function __findAro($aro) {
+        
         $conditions = [
             'alias' => $aro->alias,
             'foreign_key' => $aro->foreign_key,
             'model' => $aro->model
         ];
         
-        if($aro->parent_id == NULL) {
-            $conditions[] = 'parent_id IS NULL';
-        } else {
-            $conditions['parent_id'] = $aro->parent_id;
-        }
+        /*
+        $conditions = [
+            'model' => $aro->model
+        ];
+        */
         
         return $this->Acl->Aro->find('all', [
             'conditions' => $conditions,
