@@ -189,8 +189,8 @@ class AclExtras
                 $this->_cleaner($parentId, $acosList);
             }
         }
-        $this->out(__d('cake_acl', '{0} ACOs have been added', (int)$this->counter));
-        $this->out(__d('cake_acl', 'ACOs update complete'));
+        $this->out(__d('cake_acl', '{0} ACOs have been created, updated or deleted', (int)$this->counter));
+        // $this->out(__d('cake_acl', 'ACOs update complete'));
 
         return true;
     }

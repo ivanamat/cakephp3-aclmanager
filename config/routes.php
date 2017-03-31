@@ -19,17 +19,27 @@
 
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
+use Cake\Core\Configure;
 
-Router::connect(
-    '/AclManager',
-    ['plugin' => 'AclManager', 'controller' => 'Acl', 'action' => 'index'],
-    ['_name' => 'AclManager']
-);
+// Connect routes for admin prefix.
+if (!Configure::read('AclManager.admin') || Configure::read('AclManager.admin') != true) {
+    Router::connect(
+        'AclManager',
+        ['plugin' => 'AclManager', 'controller' => 'Acl', 'action' => 'index']
+    );
 
-Router::plugin(
-    'AclManager',
-    ['path' => '/AclManager'],
-    function (RouteBuilder $routes) {
-        $routes->fallbacks('DashedRoute');
-    }
-);
+    Router::connect(
+        'AclManager/:action/*',
+        ['plugin' => 'AclManager', 'controller' => 'Acl']
+    );
+} else {
+    Router::connect(
+        'admin/AclManager',
+        ['plugin' => 'AclManager', 'controller' => 'Acl', 'action' => 'index']
+    );
+
+    Router::connect(
+        'admin/AclManager/:action/*',
+        ['plugin' => 'AclManager', 'controller' => 'Acl']
+    );
+}

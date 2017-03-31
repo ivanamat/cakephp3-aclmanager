@@ -27,7 +27,7 @@ use Cake\Core\Configure;
  * List of AROs (Class aliases)
  * Order is important! Parent to Children
  */
-Configure::write('AclManager.aros', array('Groups', 'Roles', 'Users'));
+// Configure::write('AclManager.aros', array('Groups', 'Roles', 'Users'));
 
 /**
  * Limit used to paginate AROs

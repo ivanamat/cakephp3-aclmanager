@@ -44,16 +44,16 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
     <div class="columns large-4">
         <h3><?php echo __('Update'); ?></h3>
         <ul class="options">
-            <li><?php echo $this->Html->link(__('Update AROs'), ['controller' => 'Acl', 'action' => 'UpdateAros']); ?></li>
             <li><?php echo $this->Html->link(__('Update ACOs'), ['controller' => 'Acl', 'action' => 'UpdateAcos']); ?></li>
+            <li><?php echo $this->Html->link(__('Update AROs'), ['controller' => 'Acl', 'action' => 'UpdateAros']); ?></li>
         </ul>
     </div>
     <div class="columns large-4">
         <h3><?php echo __('Drop and restore'); ?></h3>
         <ul class="options">
-            <li><?php echo $this->Html->link(__('Drop permissions'), ['controller' => 'Acl', 'action' => 'RevokePerms'], ['confirm' => __('Do you really want to delete all permissions? After removing all permissions, only root users can access.')]); ?></li>
-            <li><?php echo $this->Html->link(__('Drop ACOs/AROs'), ['controller' => 'Acl', 'action' => 'drop'], ['confirm' => __('Do you really want to delete ACOs and AROs? This too will remove all permissions. Make sure the method isAuthorized returns true if you want update ACOs and AROs after remove all them, otherwise you can\'t get acces to manage ACOs and AROs.')]); ?></li>
-            <li><?php echo $this->Html->link(__('Restore to default'), ['controller' => 'Acl', 'action' => 'defaults'], ['confirm' => __('Do you want restore all permissions? This will override all above assigned permissions. Only root users can access after reset to defaults.')]); ?></li>
+            <li><?php echo $this->Html->link(__('Revoke permissions and set defaults'), ['controller' => 'Acl', 'action' => 'RevokePerms'], ['confirm' => __('Do you really want to revoke all permissions? This will remove all above assigned permissions and set defaults. Only first item of last ARO will have access to panel.')]); ?></li>
+            <li><?php echo $this->Html->link(__('Drop ACOs and AROs'), ['controller' => 'Acl', 'action' => 'drop'], ['confirm' => __('Do you really want delete ACOs and AROs? This will remove all above assigned permissions.')]); ?></li>
+            <li><?php echo $this->Html->link(__('Update ACOs and AROs and set default values'), ['controller' => 'Acl', 'action' => 'defaults'], ['confirm' => __('Do you want restore defaults? This will remove all above assigned permissions. Only first item of last ARO will have access to panel.')]); ?></li>
         </ul>
     </div>
 </div>
@@ -99,8 +99,7 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
                         echo "<tr class='aclmanager-ident-" . $ident . "'>";
                     }
 
-                    if ($this->AclManager->Acl->check(['Users' => ['id' => $this->request->session()->read('Auth.User.id')]], $action) ||
-                            $this->request->session()->read('Auth.User.Role.id') == 1) {
+                    if ($this->AclManager->Acl->check(['Users' => ['id' => $this->request->session()->read('Auth.User.id')]], $action)) {
                         echo "<td>";
                         echo Inflector::humanize(($ident == 1 ? "<strong>" : "" ) . ($uglyIdent ? str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $ident) : "") . h($alias) . ($ident == 1 ? "</strong>" : "" ));
                         echo "</td>";
