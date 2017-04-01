@@ -28,7 +28,7 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
 <div class="row">
     <div class="columns large-12">
         <h1><?php echo $this->Html->link(__('CakePHP 3.x - Acl Manager'),['action' => 'index']); ?></h1>
-        <p class="subtitle"><?php echo sprintf(__("Managing %s"), strtolower($model)); ?></p>
+        
     </div>
 </div>
 
@@ -60,6 +60,9 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
 
 <div class="row panel">
     <div class="columns large-12">
+        <h2><?php echo sprintf(__($model)); ?></h2>
+        <hr />
+        
         <?php echo $this->Form->create('Perms'); ?>
         <table>
             <thead>
@@ -169,7 +172,7 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
             </div>
         </div>
         <?php echo $this->Form->end(); ?>
-
+        
     </div>
 </div>
 
