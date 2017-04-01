@@ -14,11 +14,11 @@ composer require ivanamat/cakephp3-aclmanager
 
 
 ### Git submodule
-
-    git submodule add git@github.com:ivanamat/cakephp3-aclmanager.git plugins/AclManager
-    git submodule init
-    git submodule update
-
+```
+git submodule add git@github.com:ivanamat/cakephp3-aclmanager.git plugins/AclManager
+git submodule init
+git submodule update
+```
 
 ### Manual installation
 
@@ -30,15 +30,31 @@ Download the .zip or .tar.gz file, unzip and rename the plugin folder "cakephp3-
 ## Getting started
 
 * Install the CakePHP ACL plugin by running *composer require cakephp/acl*. [Read Acl plugin documentation](https://github.com/cakephp/acl).
-* Include the Acl and AclManager plugins in *app/config/bootstrap.php*
+* Set AclManager configuration. ***AclManager.aros*** must be specified.
+* Load the Acl and AclManager plugins in *app/config/bootstrap.php*
 
 ```php
-    Plugin::load('Acl', ['bootstrap' => true]);
-    Plugin::load('AclManager', ['bootstrap' => true, 'routes' => true]);
+# Example configuration for an schema based on Groups, Roles and Users
+Configure::write('AclManager.aros', array('Groups', 'Roles', 'Users'));
+
+Plugin::load('Acl', ['bootstrap' => true]);
+Plugin::load('AclManager', ['bootstrap' => true, 'routes' => true]);
 ```
 
 **Warning:** It is not recommended to use Plugin::loadAll();. if you use Plugin::loadAll(); make sure it will not load any plugin several times with Plugin::load('PluginName').
 
+### Configuration parameters
+
+* **AclManager.aros** Required. Sets the AROs to be used. The value of this parameter must be an array with the names of the AROs to be used.
+```php
+# Example configuration for an schema based on Groups, Roles and Users
+Configure::write('AclManager.aros', array('Groups', 'Roles', 'Users'));
+```
+* **AclManager.admin** Optional. Set 'admin' prefix. The value of this parameter must be boolean
+```php
+# Set prefix admin ( http://www.domain.com/admin/AclManager )
+Configure::write('AclManager.aros', true);
+```
 
 ## Creating ACL tables
 
@@ -49,7 +65,7 @@ To create ACL related tables, run the following Migrations command:
 
 ## Example schema
 
-An example schema:
+An example schema based on Groups, Roles and Users:
 
 ```sql
     CREATE TABLE `groups` (
@@ -84,14 +100,6 @@ An example schema:
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ```
 
-
-## Configure the plugin
-
-See *AclManager/config/bootstrap.php*.
-
-AclManager.aros : write in there your requester models aliases (the order is important).
-
-
 ## Auth
 
 Include and configure the *AuthComponent* and the *AclComponent* in the *AppController*
@@ -119,8 +127,8 @@ Include and configure the *AuthComponent* and the *AclComponent* in the *AppCont
         ],
         'logoutRedirect' => [
             'plugin' => false,
-            'controller' => 'Users',
-            'action' => 'login'
+            'controller' => 'Pages',
+            'action' => 'display'
         ],
         'unauthorizedRedirect' => [
             'plugin' => false,
@@ -209,34 +217,24 @@ Add the following implementation of parentNode to the file src/Model/Entity/User
 
 ## Access the plugin
 
-Now navigate to */AclManager/Acl*, update your acos and your aros or just click *Restore to default* and enjoy!
+Now navigate to http://www.domain.com/AclManager ( or http://www.domain.com/admin/AclManager If AclManager.admin is set to true ), just click *"Update ACOs and AROs and set default values"* and enjoy!
 
 
 ## Known issues
 
-* AclManager::arosBuilder Needs always Groups, Roles and Users, it must be read from Configure::read('AclManager.aros');.
-
-
-## Todo list:
-
-* Aro search engine
-
+* Not known
 
 ## Other configurations
 
-When the arosBuilder issue is solved, you will be able to configure the plugin in different ways, using only the models that you want, as example only Roles and Users or Groups and Users.
-
-
 ## About CakePHP 3.x AclManager
 
-CakePHP 3.x - Acl Manager is a single plugin for CakePHP 3.x based on the [original idea](https://github.com/FMCorz/AclManager) of [Frédéric Massart (FMCorz)](https://github.com/FMCorz) for CakePHP 2.x and getting help from [some idea](https://github.com/JcPires/CakePhp3-AclManager/blob/master/src/Controller/Component/AclManagerComponent.php) of [Jean-Christophe Pires (JcPires)](https://github.com/JcPires).
+CakePHP 3.x - Acl Manager is a single plugin for CakePHP 3.x based on the [original idea](https://github.com/FMCorz/AclManager) of [Frédéric Massart (FMCorz)](https://github.com/FMCorz) for CakePHP 2.x.
 
 
 ## Author
 
 
 Iván Amat [on GitHub](https://github.com/ivanamat)
-
 [www.ivanamat.es](http://www.ivanamat.es/)
 
 

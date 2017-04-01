@@ -17,11 +17,9 @@
  * 
  */
 
-use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Core\Configure;
 
-// Connect routes for admin prefix.
 if (!Configure::read('AclManager.admin') || Configure::read('AclManager.admin') != true) {
     Router::connect(
         'AclManager',
@@ -33,6 +31,7 @@ if (!Configure::read('AclManager.admin') || Configure::read('AclManager.admin') 
         ['plugin' => 'AclManager', 'controller' => 'Acl']
     );
 } else {
+    // Connect routes for admin prefix.
     Router::connect(
         'admin/AclManager',
         ['plugin' => 'AclManager', 'controller' => 'Acl', 'action' => 'index']
