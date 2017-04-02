@@ -31,7 +31,7 @@ Download the .zip or .tar.gz file, unzip and rename the plugin folder "cakephp3-
 
 * Install the CakePHP ACL plugin by running *composer require cakephp/acl*. [Read Acl plugin documentation](https://github.com/cakephp/acl).
 * Set AclManager configuration. ***AclManager.aros*** must be specified.
-* Load the Acl and AclManager plugins in *app/config/bootstrap.php*
+* Load the Acl and AclManager plugins in *app/config/bootstrap.php*.
 
 ```php
 # Example configuration for an schema based on Groups, Roles and Users
@@ -50,7 +50,7 @@ Plugin::load('AclManager', ['bootstrap' => true, 'routes' => true]);
 # Example configuration for an schema based on Groups, Roles and Users
 Configure::write('AclManager.aros', array('Groups', 'Roles', 'Users'));
 ```
-* **AclManager.admin** Optional. Set 'admin' prefix. The value of this parameter must be boolean
+* **AclManager.admin** Optional. Set 'admin' prefix. The value of this parameter must be boolean.
 ```php
 # Set prefix admin ( http://www.domain.com/admin/AclManager )
 Configure::write('AclManager.aros', true);
@@ -58,14 +58,14 @@ Configure::write('AclManager.aros', true);
 
 ## Creating ACL tables
 
-To create ACL related tables, run the following Migrations command:
+To create ACL related tables, run the following Migrations command.
 
     bin/cake migrations migrate -p Acl
 
 
 ## Example schema
 
-An example schema based on Groups, Roles and Users:
+An example schema based on Groups, Roles and Users.
 
 ```sql
     CREATE TABLE `groups` (
@@ -102,7 +102,7 @@ An example schema based on Groups, Roles and Users:
 
 ## Auth
 
-Include and configure the *AuthComponent* and the *AclComponent* in the *AppController*
+Include and configure the *AuthComponent* and the *AclComponent* in the *AppController*.
 
 ```php
     public $components = [
@@ -147,7 +147,7 @@ Include and configure the *AuthComponent* and the *AclComponent* in the *AppCont
 
 ### Acting as a requester
 
-Add $this->addBehavior('Acl.Acl', ['type' => 'requester']); to the initialize function in the files src/Model/Table/GroupsTable.php, src/Model/Table/RolesTable.php and src/Model/Table/UsersTable.php
+Add $this->addBehavior('Acl.Acl', ['type' => 'requester']); to the initialize function in the files src/Model/Table/GroupsTable.php, src/Model/Table/RolesTable.php and src/Model/Table/UsersTable.php.
 
 ```php
     public function initialize(array $config) {
@@ -159,7 +159,7 @@ Add $this->addBehavior('Acl.Acl', ['type' => 'requester']); to the initialize fu
 
 ### Implement parentNode function in Group entity
 
-Add the following implementation of parentNode to the file src/Model/Entity/Group.php:
+Add the following implementation of parentNode to the file src/Model/Entity/Group.php.
 
 ```php
     public function parentNode()
@@ -170,7 +170,7 @@ Add the following implementation of parentNode to the file src/Model/Entity/Grou
 
 ### Implement parentNode function in Role entity
 
-Add the following implementation of parentNode to the file src/Model/Entity/Role.php:
+Add the following implementation of parentNode to the file src/Model/Entity/Role.php.
 
 ```php
     public function parentNode() {
@@ -193,7 +193,7 @@ Add the following implementation of parentNode to the file src/Model/Entity/Role
 
 ### Implement parentNode function in User entity
 
-Add the following implementation of parentNode to the file src/Model/Entity/User.php:
+Add the following implementation of parentNode to the file src/Model/Entity/User.php.
 
 ```php
     public function parentNode() {
@@ -216,7 +216,7 @@ Add the following implementation of parentNode to the file src/Model/Entity/User
 
 ## Create a group, role, and user.
 
-Allow all. Add in AppController.php
+Allow all. Add in AppController.php.
 ```php
 public function initialize() {
 	parent::initialize();
@@ -234,7 +234,7 @@ Now navigate to http://www.domain.com/AclManager ( or http://www.domain.com/admi
 
 ## Known issues
 
-* Not known
+* Not known.
 
 ## About CakePHP 3.x Acl Manager
 
