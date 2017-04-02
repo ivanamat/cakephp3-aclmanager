@@ -214,21 +214,31 @@ Add the following implementation of parentNode to the file src/Model/Entity/User
     }
 ```
 
+## Create a group, role, and user.
+
+Allow all. Add in AppController.php
+```php
+public function initialize() {
+	parent::initialize();
+	
+	...
+	$this->Auth->allow();
+}
+```
+Now create a group, role, and user.
 
 ## Access the plugin
 
-Now navigate to http://www.domain.com/AclManager ( or http://www.domain.com/admin/AclManager If AclManager.admin is set to true ), just click *"Update ACOs and AROs and set default values"* and enjoy!
+Now navigate to http://www.domain.com/AclManager ( or http://www.domain.com/admin/AclManager If AclManager.admin is set to true ), just click *"Update ACOs and AROs and set default values"*, after update ACOs and AROs, remove *$this->Auth->allow()* from *AppController.php* and enjoy!
 
 
 ## Known issues
 
 * Not known
 
-## Other configurations
+## About CakePHP 3.x Acl Manager
 
-## About CakePHP 3.x AclManager
-
-CakePHP 3.x - Acl Manager is a single plugin for CakePHP 3.x based on the [original idea](https://github.com/FMCorz/AclManager) of [Frédéric Massart (FMCorz)](https://github.com/FMCorz) for CakePHP 2.x.
+CakePHP 3.x - AclManager is a single plugin for manage CakePHP 3.x ACLs, based on the [original idea](https://github.com/FMCorz/AclManager) of [Frédéric Massart (FMCorz)](https://github.com/FMCorz) for CakePHP 2.x.
 
 
 ## Author
