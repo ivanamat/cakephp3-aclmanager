@@ -32,6 +32,7 @@ use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Inflector;
 
 class AclManagerComponent extends Component {
     
@@ -71,13 +72,22 @@ class AclManagerComponent extends Component {
         $parent = null;
         
         $models = Configure::read('AclManager.aros');
-        foreach ($models as $model) {
+        // foreach ($models as $model) {
+        for($i = 0; $i < count($models); $i++) {
+            $model = $models[$i];
             $this->{$model} = TableRegistry::get($model);
 
             // Build the roles.
             $items = $this->{$model}->find('all');
             foreach($items as $item) {
-                $arrayItem = $item->toArray();
+                if($i > 0 && isset($models[$i-1])) {
+                    $pk = strtolower(Inflector::singularize($models[$i-1])).'_id';
+                    $parent = $this->Aro->find('all',
+                        ['conditions' => [
+                            'model' => $models[$i-1],
+                            'foreign_key' => $item->{$pk}
+                        ]])->first();
+                }
                 
                 // Prepare alias
                 $alias = null;
@@ -91,21 +101,13 @@ class AclManagerComponent extends Component {
                 
                 // Create aro
                 $aro = new Aro([
-                    'alias'=>$alias,
+                    'alias' => $alias,
                     'foreign_key' => $item->id,
-                    'model'=>$this->{$model}->alias(),
-                    'parent_id' => (isset($parent->id)) ? $parent->id : null
+                    'model' => $model,
+                    'parent_id' => (isset($parent->id)) ? $parent->id : Null
                 ]);
 
-                // If aro not exist and aro saved store the parent
                 if($this->__findAro($aro) == 0 && $this->Acl->Aro->save($aro)) {  
-                    if($counter < (count($models)-1)) {
-                        $parent = $this->Aro->find('all',
-                            ['conditions' => [
-                                'model' => $model,
-                                'foreign_key' => $arrayItem["id"]
-                            ]])->first();
-                    }
                     $counter++;
                 }
             }
@@ -145,11 +147,20 @@ class AclManagerComponent extends Component {
      **/
     private function __findAro($aro) {
         
-        $conditions = [
-            'alias' => $aro->alias,
-            'foreign_key' => $aro->foreign_key,
-            'model' => $aro->model
-        ];
+        
+        if(isset($aro->parent_id)) {
+            $conditions = [
+                'parent_id' => $aro->parent_id,
+                'foreign_key' => $aro->foreign_key,
+                'model' => $aro->model
+            ];
+        } else {
+            $conditions = [
+                'parent_id IS NULL',
+                'foreign_key' => $aro->foreign_key,
+                'model' => $aro->model
+            ];
+        }
 
         return $this->Acl->Aro->find('all', [
             'conditions' => $conditions,
