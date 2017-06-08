@@ -16,7 +16,7 @@
         "php": ">=5.4.16",
         "composer/installers": "*",
         "cakephp/cakephp": "~3.0",
-        "cakephp/plugin-installer": "~0.0",
+        "cakephp/plugin-installer": "~1.0",
         "cakephp/acl": "~0.2"
     },
     "autoload": {
