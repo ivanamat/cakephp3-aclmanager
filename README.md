@@ -53,7 +53,7 @@ Configure::write('AclManager.aros', array('Groups', 'Roles', 'Users'));
 * **AclManager.admin** Optional. Set 'admin' prefix. The value of this parameter must be boolean.
 ```php
 # Set prefix admin ( http://www.domain.com/admin/AclManager )
-Configure::write('AclManager.aros', true);
+Configure::write('AclManager.admin', true);
 ```
 
 ## Creating ACL tables
