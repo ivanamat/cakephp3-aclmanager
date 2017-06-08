@@ -35,6 +35,7 @@ Download the .zip or .tar.gz file, unzip and rename the plugin folder "cakephp3-
 
 ```php
 # Example configuration for an schema based on Groups, Roles and Users
+Configure::write('AclManager.models', array('Groups', 'Roles', 'Users'));
 Configure::write('AclManager.aros', array('Groups', 'Roles', 'Users'));
 
 Plugin::load('Acl', ['bootstrap' => true]);
