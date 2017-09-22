@@ -91,12 +91,12 @@ class AclManagerComponent extends Component {
                 
                 // Prepare alias
                 $alias = null;
-                if(isset($arrayItem["name"])) {
-                    $alias = $arrayItem["name"];
+                if(isset($item->name)) {
+                    $alias = $item->name;
                 }
                 
-                if(isset($arrayItem["username"])) {
-                    $alias = $arrayItem["username"];
+                if(isset($item->username)) {
+                    $alias = $item->username;
                 }
                 
                 // Create aro
