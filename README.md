@@ -249,8 +249,8 @@ Now navigate to http://www.domain.com/AclManager ( or http://www.domain.com/admi
 
 ### Contributors
 
-pfuri [on GitHub](https://github.com/pfuri)  
-tjanssl [on GitHub](https://github.com/tjanssl)
+* pfuri [on GitHub](https://github.com/pfuri)  
+* tjanssl [on GitHub](https://github.com/tjanssl)
 
 [Read full changelog](CHANGELOG.md)
 
