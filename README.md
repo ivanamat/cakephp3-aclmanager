@@ -240,14 +240,19 @@ Now navigate to http://www.domain.com/AclManager ( or http://www.domain.com/admi
 ## Changelog
 
 ### v1.1
+
+#### Changed
+
 * Fixed the aro alias naming.
 * Updated version requirement to ~1.0 for latest cakephp/plugin-installer.
 * Updating docs to use correct config param for setting admin prefix.
 
-### v1.0.5
-* Fixed bug on "Update ACOs". Now use AclExtras to update ACOs.
-* Use *AclManager.aros* to set AROs models. This make the plugin more configurable.
-* Added *AclManager.admin* param to set admin prefix. This param is boolean type.
+### Contributors
+
+pfuri [on GitHub](https://github.com/pfuri)  
+tjanssl [on GitHub](https://github.com/tjanssl)
+
+[Read full changelog](CHANGELOG.md)
 
 
 ## About CakePHP 3.x Acl Manager
@@ -257,15 +262,8 @@ CakePHP 3.x - AclManager is a single plugin for manage CakePHP 3.x ACLs, based o
 
 ## Author
 
-
 Iván Amat [on GitHub](https://github.com/ivanamat)  
 [www.ivanamat.es](http://www.ivanamat.es/)
-
-
-## Contributors
-
-pfuri [on GitHub](https://github.com/pfuri)  
-tjanssl [on GitHub](https://github.com/tjanssl)
 
 ## Licensed
 
