@@ -53,7 +53,9 @@ Configure::write('AclManager.uglyIdent', true);
  * Actions to ignore when looking for new ACOs
  * Format: 'action', 'Controller/action' or 'Plugin.Controller/action'
  */
-Configure::write('AclManager.ignoreActions', array('isAuthorized'));
+if(!Configure::check('AclManager.ignoreActions')) {
+    Configure::write('AclManager.ignoreActions', array('isAuthorized'));
+}
 
 /**
  * List of ARO models to load

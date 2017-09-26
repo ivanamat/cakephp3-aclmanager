@@ -437,6 +437,10 @@ class AclExtras
     protected function _checkMethods($className, $controllerName, $node, $pluginPath = null, $prefixPath = null)
     {
         $excludes = $this->_getCallbacks($className, $pluginPath, $prefixPath);
+        if(Configure::check('AclManager.ignoreActions')) {
+            $ignore = Configure::read('AclManager.ignoreActions');
+            $excludes = array_merge($excludes, $ignore);
+        }
         $baseMethods = get_class_methods(new Controller);
         $namespace = $this->_getNamespace($className, $pluginPath, $prefixPath);
         $methods = get_class_methods(new $namespace);
