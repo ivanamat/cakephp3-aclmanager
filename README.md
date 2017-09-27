@@ -30,7 +30,7 @@ Download the .zip or .tar.gz file, unzip and rename the plugin folder "cakephp3-
 ## Getting started
 
 * Install the CakePHP ACL plugin by running *composer require cakephp/acl*. [Read Acl plugin documentation](https://github.com/cakephp/acl).
-* Set AclManager configuration. ***AclManager.aros*** must be specified.
+* Set AclManager configuration. ***AclManager.aros***. Must be specified before load plugin.
 * Load the Acl and AclManager plugins in *app/config/bootstrap.php*.
 
 ```php
@@ -45,6 +45,8 @@ Plugin::load('AclManager', ['bootstrap' => true, 'routes' => true]);
 
 ### Configuration parameters
 
+Must be specified before load plugin.
+
 * **AclManager.aros** Required. Sets the AROs to be used. The value of this parameter must be an array with the names of the AROs to be used.
 ```php
 # Example configuration for an schema based on Groups, Roles and Users
@@ -54,6 +56,10 @@ Configure::write('AclManager.aros', array('Groups', 'Roles', 'Users'));
 ```php
 # Set prefix admin ( http://www.domain.com/admin/AclManager )
 Configure::write('AclManager.admin', true);
+```
+* **AclManager.ignoreActions** Optional. Ignore all actions you don't want to add to your ACLs. The value of this parameter must be an array of actions.
+```php
+Configure::write('AclManager.ignoreActions', array('isAuthorized','login','logout'));
 ```
 
 ## Creating ACL tables
@@ -239,7 +245,11 @@ Now navigate to http://www.domain.com/AclManager ( or http://www.domain.com/admi
 
 ## Changelog
 
-### v1.1
+### v1.2 (+v1.1)
+
+#### Added
+
+* ***AclManager.ignoreActios*** Ignore all actions you don't want to add to your ACLs.
 
 #### Changed
 

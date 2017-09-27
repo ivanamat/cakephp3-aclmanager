@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2
+
+### Added
+
+* ***AclManager.ignoreActios*** Ignore all actions you don't want to add to your ACLs.
+
 ## v1.1
 
 ### Changed
