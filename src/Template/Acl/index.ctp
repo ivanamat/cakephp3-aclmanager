@@ -53,6 +53,16 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
     </div>
 </div>
 
+<?php if($this->request->session()->read('Flash')) { ?>
+<div class="row panel">
+    <div class="columns large-12">
+        <h3>Response</h3>
+        <hr />
+        <?php echo $this->Flash->render(); ?>
+    </div>
+</div>
+<?php } ?>
+
 <div class="row panel">
     <div class="columns large-12">
         <h2><?php echo __('About CakePHP 3.x - Acl Manager'); ?></h2>

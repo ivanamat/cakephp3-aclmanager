@@ -108,7 +108,7 @@ class AclController extends AppController {
     /**
      * Manage Permissions
      */
-    public function permissions($model = 'Groups') {
+    public function permissions($model = NULL) {
 
         if(!$this->Auth->user()){
             $this->Flash->error(__('Please sign in'));
@@ -178,7 +178,7 @@ class AclController extends AppController {
                 $perms[str_replace('/', ':', $acoNode)][$Aro->alias() . ":" . $aroId] = $evaluate['allowed'];
             }
         }
-
+        
         $this->request->data = array('Perms' => $perms);
         $this->set('model', $model);
         $this->set('manage', Configure::read('AclManager.aros'));
@@ -195,7 +195,7 @@ class AclController extends AppController {
         
         $this->AclExtras->acoUpdate();
 
-        $url = ($this->request->referer() == '/') ? ['plugin' => 'AclManager','controller' => 'Acl','action' => 'permissions'] : $this->request->referer();
+        $url = ($this->request->referer() == '/') ? ['plugin' => 'AclManager','controller' => 'Acl','action' => 'index'] : $this->request->referer();
         $this->redirect($url);
     }
 
@@ -205,7 +205,7 @@ class AclController extends AppController {
     public function updateAros() {
 	$arosCounter = $this->AclManager->arosBuilder();
         $this->Flash->success(sprintf(__("%d AROs have been created, updated or deleted"), $arosCounter));
-        $url = ($this->request->referer() == '/') ? ['plugin' => 'AclManager','controller' => 'Acl','action' => 'permissions'] : $this->request->referer();
+        $url = ($this->request->referer() == '/') ? ['plugin' => 'AclManager','controller' => 'Acl','action' => 'index'] : $this->request->referer();
         $this->redirect($url);
     }
 
@@ -242,7 +242,7 @@ class AclController extends AppController {
             $mCounter++;
         }
         
-        $this->redirect(array("action" => "permissions"));
+        $this->redirect(array("action" => "index"));
     }
     
     /**
@@ -353,7 +353,7 @@ class AclController extends AppController {
         }
         
         $this->Flash->success(__("Congratulations! Everything has been restored by default!"));
-        $this->redirect(["action" => "permissions"]);
+        $this->redirect(["action" => "index"]);
     }
 
     /**
@@ -544,25 +544,7 @@ class AclController extends AppController {
     private function _parseAros($aros) {
         $cache = array();
         foreach ($aros as $aro) {
-            $data[$this->model] = [
-                'id' => $aro->id,
-                'created' => $aro->created,
-                'modified' => $aro->modified
-            ];
-
-            if (isset($aro->group_id)) {
-                $data[$this->model]['group_id'] = $aro->group_id;
-            }
-            if (isset($aro->role_id)) {
-                $data[$this->model]['role_id'] = $aro->role_id;
-            }
-            if (isset($aro->name)) {
-                $data[$this->model]['name'] = $aro->name;
-            }
-            if (isset($aro->username)) {
-                $data[$this->model]['username'] = $aro->username;
-            }
-
+            $data[$this->model] = $aro;
             array_push($cache, $data);
         }
 
