@@ -352,6 +352,18 @@ class AclExtras
             $controllers = $dir->find('.*Controller\.php');
         }
 
+        $tmp = [];
+        if(is_array(Configure::read('AclManager.ignoreControllers'))) {
+            $tmp = Configure::read('AclManager.ignoreControllers');
+        }
+        
+        $ignoreControllers = [];
+        foreach($tmp as $controller) {
+            $ignoreControllers[] = $controller . 'Controller.php';
+        }
+        
+        $controllers = array_diff($controllers,$ignoreControllers);
+        
         return $controllers;
     }
 
