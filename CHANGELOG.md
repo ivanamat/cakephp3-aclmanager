@@ -20,6 +20,7 @@
     ));
 ```
 * Updated indexctp and permissioins.ctp: Show or hide ACLs that do not have permissions in the ACL list. Show flash messages below the actions panel.
+* Fixed acoUpdate syncronization.
 
 ## v1.2
 
