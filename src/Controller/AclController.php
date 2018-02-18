@@ -182,6 +182,7 @@ class AclController extends AppController {
         $this->request->data = array('Perms' => $perms);
         $this->set('model', $model);
         $this->set('manage', Configure::read('AclManager.aros'));
+        $this->set('hideDenied', Configure::read('AclManager.hideDenied'));
         $this->set('aroAlias', $Aro->alias());
         $this->set('aroDisplayField', $Aro->displayField());
         $this->set(compact('acos', 'aros'));
@@ -242,7 +243,7 @@ class AclController extends AppController {
             $mCounter++;
         }
         
-        $this->redirect(array("action" => "index"));
+        $this->redirect(array("action" => "permissions"));
     }
     
     /**
