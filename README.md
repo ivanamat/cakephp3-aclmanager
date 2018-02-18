@@ -57,6 +57,10 @@ Configure::write('AclManager.aros', array('Groups', 'Roles', 'Users'));
 # Set prefix admin ( http://www.domain.com/admin/AclManager )
 Configure::write('AclManager.admin', true);
 ```
+* ***AclManager.hideDenied*** Hide plugins, controllers and actions denied in ACLs lists.
+```php
+Configure::write('AclManager.hideDenied', true);
+```
 * ***AclManager.ignoreActions*** Ignore all plugins, controllers and actions you don't want to add to your ACLs. The value of this parameter must be an array.
 ```php
     # Ecample:
