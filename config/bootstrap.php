@@ -62,7 +62,11 @@ if(!Configure::check('AclManager.ignoreControllers')) {
  * Format: 'action', 'Controller/action' or 'Plugin.Controller/action'
  */
 if(!Configure::check('AclManager.ignoreActions')) {
-    Configure::write('AclManager.ignoreActions', array('isAuthorized','Acl'));
+    Configure::write('AclManager.ignoreActions', array(
+        'isAuthorized',
+        'Acl.*',
+        'Error/*'
+    ));
 }
 
 /**

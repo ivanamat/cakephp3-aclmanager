@@ -93,6 +93,20 @@ class AclExtras
      * @var array
      */
     protected $foundACOs = [];
+    
+    /**
+     * List of actions to ignore during synchronization
+     *
+     * @var array
+     */
+    protected $ignoreActions = [];
+    
+    /**
+     * List of paths to ignore during synchronization
+     *
+     * @var array
+     */
+    protected $ignorePaths = [];
 
     /**
      * Start up And load Acl Component / Aco model
@@ -110,6 +124,7 @@ class AclExtras
         $this->Aco = $this->Acl->Aco;
         $this->controller = $controller;
         $this->_buildPrefixes();
+        $this->_processIgnored();
     }
 
     /**
@@ -172,6 +187,7 @@ class AclExtras
             $this->_processControllers($root);
             $this->_processPrefixes($root);
             $this->_processPlugins($root, $plugins);
+            // debug($this->foundACOs);
         } else {
             $plugin = $params['plugin'];
             if (!Plugin::loaded($plugin)) {
@@ -192,6 +208,7 @@ class AclExtras
         $this->out(__d('cake_acl', '{0} ACOs have been created, updated or deleted', (int)$this->counter));
         // $this->out(__d('cake_acl', 'ACOs update complete'));
 
+        // die();
         return true;
     }
 
@@ -256,39 +273,43 @@ class AclExtras
                 $pluginAlias
             ];
             $path = implode('/', Hash::filter($path));
-            $pathNode = $this->_checkNode($path, $pluginAlias, $root->id);
-            $this->foundACOs[$root->id][] = $pluginAlias;
+            
+            if(!in_array($path, $this->ignorePaths) && !in_array($path, $this->ignoreActions)) {
+                
+                $pathNode = $this->_checkNode($path, $pluginAlias, $root->id);
+                $this->foundACOs[$root->id][] = $pluginAlias;
+                
+                if (isset($this->foundACOs[$pathNode->id])) {
+                    $this->foundACOs[$pathNode->id] += $this->_updateControllers($pathNode, $controllers, $plugin);
+                } else {
+                    $this->foundACOs[$pathNode->id] = $this->_updateControllers($pathNode, $controllers, $plugin);
+                }
 
-            if (isset($this->foundACOs[$pathNode->id])) {
-                $this->foundACOs[$pathNode->id] += $this->_updateControllers($pathNode, $controllers, $plugin);
-            } else {
-                $this->foundACOs[$pathNode->id] = $this->_updateControllers($pathNode, $controllers, $plugin);
-            }
+                if (isset($this->pluginPrefixes[$plugin])) {
+                    foreach (array_keys($this->pluginPrefixes[$plugin]) as $prefix) {
+                        $path = [
+                            $this->rootNode,
+                            $pluginAlias
+                        ];
+                        $path = implode('/', Hash::filter($path));
+                        $pluginNode = $this->_checkNode($path, $pluginAlias, $root->id);
+                        $this->foundACOs[$root->id][] = $pluginAlias;
 
-            if (isset($this->pluginPrefixes[$plugin])) {
-                foreach (array_keys($this->pluginPrefixes[$plugin]) as $prefix) {
-                    $path = [
-                        $this->rootNode,
-                        $pluginAlias
-                    ];
-                    $path = implode('/', Hash::filter($path));
-                    $pluginNode = $this->_checkNode($path, $pluginAlias, $root->id);
-                    $this->foundACOs[$root->id][] = $pluginAlias;
+                        $path = [
+                            $this->rootNode,
+                            $pluginAlias,
+                            $prefix,
+                        ];
+                        $path = implode('/', Hash::filter($path));
+                        $pathNode = $this->_checkNode($path, $prefix, $pluginNode->id);
+                        $this->foundACOs[$pluginNode->id][] = $prefix;
 
-                    $path = [
-                        $this->rootNode,
-                        $pluginAlias,
-                        $prefix,
-                    ];
-                    $path = implode('/', Hash::filter($path));
-                    $pathNode = $this->_checkNode($path, $prefix, $pluginNode->id);
-                    $this->foundACOs[$pluginNode->id][] = $prefix;
-
-                    $controllers = $this->getControllerList($plugin, $prefix);
-                    if (isset($this->foundACOs[$pathNode->id])) {
-                        $this->foundACOs[$pathNode->id] += $this->_updateControllers($pathNode, $controllers, $pluginAlias, $prefix);
-                    } else {
-                        $this->foundACOs[$pathNode->id] = $this->_updateControllers($pathNode, $controllers, $pluginAlias, $prefix);
+                        $controllers = $this->getControllerList($plugin, $prefix);
+                        if (isset($this->foundACOs[$pathNode->id])) {
+                            $this->foundACOs[$pathNode->id] += $this->_updateControllers($pathNode, $controllers, $pluginAlias, $prefix);
+                        } else {
+                            $this->foundACOs[$pathNode->id] = $this->_updateControllers($pathNode, $controllers, $pluginAlias, $prefix);
+                        }
                     }
                 }
             }
@@ -324,8 +345,10 @@ class AclExtras
                 $controllerName
             ];
             $path = implode('/', Hash::filter($path));
-            $controllerNode = $this->_checkNode($path, $controllerName, $root->id);
-            $this->_checkMethods($controller, $controllerName, $controllerNode, $pluginPath, $prefix);
+            if(!in_array($path, $this->ignorePaths)) {
+                $controllerNode = $this->_checkNode($path, $controllerName, $root->id);
+                $this->_checkMethods($controller, $controllerName, $controllerNode, $pluginPath, $prefix);
+            }
         }
 
         return $controllersNames;
@@ -352,18 +375,6 @@ class AclExtras
             $controllers = $dir->find('.*Controller\.php');
         }
 
-        $tmp = [];
-        if(is_array(Configure::read('AclManager.ignoreControllers'))) {
-            $tmp = Configure::read('AclManager.ignoreControllers');
-        }
-        
-        $ignoreControllers = [];
-        foreach($tmp as $controller) {
-            $ignoreControllers[] = $controller . 'Controller.php';
-        }
-        
-        $controllers = array_diff($controllers,$ignoreControllers);
-        
         return $controllers;
     }
 
@@ -451,7 +462,7 @@ class AclExtras
         $excludes = $this->_getCallbacks($className, $pluginPath, $prefixPath);
         if(Configure::check('AclManager.ignoreActions')) {
             $ignore = Configure::read('AclManager.ignoreActions');
-            $excludes = array_merge($excludes, $ignore);
+            $excludes = array_merge($excludes, $this->ignoreActions);
         }
         $baseMethods = get_class_methods(new Controller);
         $namespace = $this->_getNamespace($className, $pluginPath, $prefixPath);
@@ -475,8 +486,11 @@ class AclExtras
                 $action
             ];
             $path = implode('/', Hash::filter($path));
-            $this->_checkNode($path, $action, $node->id);
-            $actions[$key] = $action;
+            
+            if(!in_array($path, $this->ignorePaths) && !in_array($action, $this->ignoreActions)) {
+                $this->_checkNode($path, $action, $node->id);
+                $actions[$key] = $action;
+            }
         }
         if ($this->_clean) {
             $this->_cleaner($node->id, $actions);
@@ -570,5 +584,23 @@ class AclExtras
                 }
             }
         }
+    }
+    
+    protected function _processIgnored() {
+        $ignore = [];
+        $ignoreActions = Configure::read('AclManager.ignoreActions');
+        foreach($ignoreActions as $ignoreAction) {
+            $isPlugin = boolval(strrpos($ignoreAction, "."));
+            $isController = boolval(strrpos($ignoreAction, "/"));
+            $isAction = (!$isPlugin && !$isController) ? true : false;
+
+            if(!$isAction) {
+                $this->ignorePaths[] = str_replace(['/*','.*'],'',$this->rootNode.'/'.str_replace('.','/',$ignoreAction));
+            } else {
+                $this->ignoreActions[] = $ignoreAction;
+            }
+        }
+        
+        return true;
     }
 }
