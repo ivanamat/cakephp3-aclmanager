@@ -57,9 +57,17 @@ Configure::write('AclManager.aros', array('Groups', 'Roles', 'Users'));
 # Set prefix admin ( http://www.domain.com/admin/AclManager )
 Configure::write('AclManager.admin', true);
 ```
-* **AclManager.ignoreActions** Optional. Ignore all actions you don't want to add to your ACLs. The value of this parameter must be an array of actions.
+* ***AclManager.ignoreActions*** Ignore all plugins, controllers and actions you don't want to add to your ACLs. The value of this parameter must be an array.
 ```php
-Configure::write('AclManager.ignoreActions', array('isAuthorized','login','logout'));
+    # Ecample:
+    Configure::write('AclManager.ignoreActions', array(
+        'actionName', // ignore action
+        'Plugin.*', // Ignore the plugin
+        'Plugin.Controller/*', // Ignore the plugin controller
+        'Plugin.Controller/Action', // Ignore specific action from the plugin.
+        'Error/*' // Ignore the controller
+        'Error/Action' // Ignore specifc action from controller
+    ));
 ```
 
 ## Creating ACL tables
