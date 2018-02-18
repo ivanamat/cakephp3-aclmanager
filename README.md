@@ -245,25 +245,26 @@ Now navigate to http://www.domain.com/AclManager ( or http://www.domain.com/admi
 
 ## Changelog
 
-### v1.2 (+v1.1)
+### v1.3
 
 #### Added
 
-* ***AclManager.ignoreActios*** Ignore all actions you don't want to add to your ACLs.
+* ***AclManager.hideDenied*** Hide plugins, controllers and actions denied in ACLs lists.
 
 #### Changed
 
-* Fixed the aro alias naming.
-* Updated version requirement to ~1.0 for latest cakephp/plugin-installer.
-* Updating docs to use correct config param for setting admin prefix.
-
-### Contributors
-
-* pfuri [on GitHub](https://github.com/pfuri)  
-* tjanssl [on GitHub](https://github.com/tjanssl)
-
-[Read full changelog](CHANGELOG.md)
-
+* ***AclManager.ignoreActions*** Ignore all plugins, controllers and actions you don't want to add to your ACLs.
+```php
+    Configure::write('AclManager.ignoreActions', array(
+        'actionName', // ignore action
+        'Plugin.*', // Ignore the plugin
+        'Plugin.Controller/*', // Ignore the plugin controller
+        'Plugin.Controller/Action', // Ignore specific action from the plugin.
+        'Error/*' // Ignore the controller
+        'Error/Action' // Ignore specifc action from controller
+    ));
+```
+* Updated indexctp and permissioins.ctp: Show or hide ACLs that do not have permissions in the ACL list. Show flash messages below the actions panel.
 
 ## About CakePHP 3.x Acl Manager
 
