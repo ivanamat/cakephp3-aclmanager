@@ -114,8 +114,13 @@ echo $this->Html->css('AclManager.default',['inline' => false]);
                     if ($ident != $lastIdent) {
                         echo "<tr class='aclmanager-ident-" . $ident . "'>";
                     }
+                    
+                    $uAllowed = true;
+                    if($hideDenied) {
+                        $uAllowed = $this->AclManager->Acl->check(['Users' => ['id' => $this->request->session()->read('Auth.User.id')]], $action);
+                    }
 
-                    if ($this->AclManager->Acl->check(['Users' => ['id' => $this->request->session()->read('Auth.User.id')]], $action)) {
+                    if ($uAllowed) {
                         echo "<td>";
                         echo Inflector::humanize(($ident == 1 ? "<strong>" : "" ) . ($uglyIdent ? str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $ident) : "") . h($alias) . ($ident == 1 ? "</strong>" : "" ));
                         echo "</td>";
