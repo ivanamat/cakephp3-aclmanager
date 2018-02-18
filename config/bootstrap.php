@@ -50,11 +50,11 @@ use Cake\Core\Configure;
 Configure::write('AclManager.uglyIdent', true);
 
 /**
- * Actions to ignore when looking for new ACOs
- * Format: 'action', 'Controller/action' or 'Plugin.Controller/action'
+ * Hide denied on ACL list
+ * Format: boolean ( true/false)
  */
-if(!Configure::check('AclManager.ignoreControllers')) {
-    Configure::write('AclManager.ignoreControllers', array('Error'));
+if(!Configure::check('AclManager.hideDenied')) {
+    Configure::write('AclManager.hideDenied', true);
 }
 
 /**
