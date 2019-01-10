@@ -9,23 +9,8 @@ You can install this plugin into your CakePHP application using [composer](http:
 The recommended way to install composer packages is:
 
 ```
-composer require ivanamat/cakephp3-aclmanager
+composer require todi1979/cakephp3-aclmanager
 ```
-
-
-### Git submodule
-```
-git submodule add git@github.com:ivanamat/cakephp3-aclmanager.git plugins/AclManager
-git submodule init
-git submodule update
-```
-
-### Manual installation
-
-Download the .zip or .tar.gz file, unzip and rename the plugin folder "cakephp3-aclmanager" to "AclManager" then copy the folder to your plugins folder.
-
-[Download release](https://github.com/ivanamat/cakephp3-aclmanager/releases)
-
 
 ## Getting started
 
@@ -250,45 +235,3 @@ Now create a group, role, and user.
 Now navigate to http://www.domain.com/AclManager ( or http://www.domain.com/admin/AclManager If AclManager.admin is set to true ), just click *"Update ACOs and AROs and set default values"*, after update ACOs and AROs, remove *$this->Auth->allow()* from *AppController.php* and enjoy!
 
 
-## Known issues
-
-* Not known.
-
-
-## Changelog
-
-### v1.3
-
-#### Added
-
-* ***AclManager.hideDenied*** Hide plugins, controllers and actions denied in ACLs lists.
-
-#### Changed
-
-* ***AclManager.ignoreActions*** Ignore all plugins, controllers and actions you don't want to add to your ACLs.
-```php
-    Configure::write('AclManager.ignoreActions', array(
-        'actionName', // ignore action
-        'Plugin.*', // Ignore the plugin
-        'Plugin.Controller/*', // Ignore the plugin controller
-        'Plugin.Controller/Action', // Ignore specific action from the plugin.
-        'Error/*' // Ignore the controller
-        'Error/Action' // Ignore specifc action from controller
-    ));
-```
-* Updated indexctp and permissioins.ctp: Show or hide ACLs that do not have permissions in the ACL list. Show flash messages below the actions panel.
-* Fixed acoUpdate syncronization.
-
-## About CakePHP 3.x Acl Manager
-
-CakePHP 3.x - AclManager is a single plugin for manage CakePHP 3.x ACLs, based on the [original idea](https://github.com/FMCorz/AclManager) of [Frédéric Massart (FMCorz)](https://github.com/FMCorz) for CakePHP 2.x.
-
-
-## Author
-
-Iván Amat [on GitHub](https://github.com/ivanamat)  
-[www.ivanamat.es](http://www.ivanamat.es/)
-
-## Licensed
-
-[MIT License](https://opensource.org/licenses/MIT)
