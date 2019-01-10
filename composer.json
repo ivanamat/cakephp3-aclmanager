@@ -1,8 +1,8 @@
 {
-    "name": "ivanamat/cakephp3-aclmanager",
+    "name": "todi1979/cakephp3-aclmanager",
     "description": "AclManager plugin for CakePHP 3.x",
     "keywords": ["cakephp", "cakephp3", "cake3", "plugin", "acl", "manager"],
-    "homepage": "https://github.com/ivanamat/cakephp3-aclmanager",
+    "homepage": "https://github.com/todi1979/cakephp3-aclmanager",
     "type": "cakephp-plugin",
     "license": "MIT",
     "authors": [
