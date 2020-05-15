@@ -47,3 +47,4 @@
 * Fixed bug on "Update ACOs". Now use AclExtras to update ACOs.
 * Use *AclManager.aros* to set AROs models. This make the plugin more configurable.
 * Added *AclManager.admin* param to set admin prefix. This param is boolean type.
+
