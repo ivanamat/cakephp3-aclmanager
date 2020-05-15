@@ -283,6 +283,9 @@ Now navigate to http://www.domain.com/AclManager ( or http://www.domain.com/admi
 
 CakePHP 3.x - AclManager is a single plugin for manage CakePHP 3.x ACLs, based on the [original idea](https://github.com/FMCorz/AclManager) of [Frédéric Massart (FMCorz)](https://github.com/FMCorz) for CakePHP 2.x.
 
+This project will be deprecated in favor of CakePHP 4.x - AclManager.
+
+All code will be moved to the repository https://github.com/ivanamat/cakephp-aclmanager in order to continue future versions.
 
 ## Author
 
