@@ -271,7 +271,7 @@ Now navigate to http://www.domain.com/AclManager ( or http://www.domain.com/admi
         'actionName', // ignore action
         'Plugin.*', // Ignore the plugin
         'Plugin.Controller/*', // Ignore the plugin controller
-        'Plugin.Controller/Action', // Ignore specific action from the plugin.
+        'Plugin.Controller/Action', // Ignore specific action from the plugin
         'Error/*' // Ignore the controller
         'Error/Action' // Ignore specifc action from controller
     ));
